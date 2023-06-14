@@ -1,0 +1,10 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [{
+  "provider": "unpkg",
+  "library": "ajax@0.0.4",
+  "destination": "wwwroot/ajax/"
+}
+]
+}
