@@ -2,9 +2,11 @@
 
 namespace TestKSK.Data
 {
-    public class Beverage : CommonData
+    public class Beverage : CommonDataWithId
     {
         public string Name { get; set; }
         public uint Price { get; set; }
+        public Guid VendingMachineId { get; set; }
+        public VendingMachine VendingMachine { get; set; }
     }
 }

@@ -1,9 +1,8 @@
 ﻿using TestKSK.Data.Interfaces;
 
-namespace TestKSK.Repository.BaseRepositories
+namespace TestKSK.Interfaces
 {
     public interface IRepository<T> : IRepositoryWithTypedId<T, Guid> where T : IEntityWithTypedId<Guid>
     {
     }
-
 }

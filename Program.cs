@@ -1,18 +1,13 @@
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using TestKSK;
+using TestKSK.Extensions;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
-string connectString = builder.Configuration.GetConnectionString("DefaultConnection");
-SqlConnectionStringBuilder sqlBuilder = new SqlConnectionStringBuilder(connectString);
-sqlBuilder.AttachDBFilename = @"D:\Misha\Coding\OtherProjects\TestKSK\App_Data\data.mdf";
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(sqlBuilder.ConnectionString));
+builder.Services.AddCustomizedDataStore(builder.Configuration);
 
 var app = builder.Build();
 

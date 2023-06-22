@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Reflection;
+using TestKSK.Data.BaseEnities;
 using TestKSK.Data.Interfaces;
 
 namespace TestKSK
@@ -22,8 +23,8 @@ namespace TestKSK
 
         private static void RegisterEntities(ModelBuilder modelBuilder, IEnumerable<Type> typeToRegisters)
         {
-            var entityTypes = typeToRegisters.Where(x => x.GetTypeInfo()
-            .IsSubclassOf(typeof(IEntity)) && !x.GetTypeInfo().IsAbstract);
+            var entityTypes = typeToRegisters.Where(x => x.GetTypeInfo().GetInterfaces()
+                .Any(i => i == typeof(IEntity)) && !x.GetTypeInfo().IsAbstract);
             foreach (var type in entityTypes)
             {
                 modelBuilder.Entity(type);
@@ -35,11 +36,7 @@ namespace TestKSK
             foreach (var entity in modelBuilder.Model.GetEntityTypes())
             {
                 if (entity.ClrType.Namespace != null)
-                {
-                    var nameParts = entity.ClrType.Namespace.Split('.');
-                    var tableName = string.Concat(nameParts[2], "_", entity.ClrType.Name);
-                    modelBuilder.Entity(entity.Name).ToTable(tableName);
-                }
+                    modelBuilder.Entity(entity.Name).ToTable(entity.ClrType.Name);
             }
 
             foreach (var relationship in modelBuilder.Model.GetEntityTypes()

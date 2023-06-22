@@ -3,10 +3,10 @@ using TestKSK.Models;
 
 namespace TestKSK.Data
 {
-    public class VendingMachine : CommonData
+    public class VendingMachine : CommonDataWithId
     {
         public uint UserBalance { get; set; }
-        public BeverageModel[] Beverages { get; set; }
-        public MoneyUnitModel[] MoneyUnits { get; set; }
+        public IEnumerable<Beverage> Beverages { get; set; }
+        public IEnumerable<MoneyUnit> MoneyUnits { get; set; }
     }
 }
