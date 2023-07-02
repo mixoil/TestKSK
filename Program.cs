@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TestKSK;
 using TestKSK.Extensions;
@@ -5,9 +6,9 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddControllersWithViews();
-builder.Services.AddCustomizedDataStore(builder.Configuration);
+builder.Services.AddServices()
+    .AddControllersWithViews();
+await builder.Services.AddCustomizedDataStore(builder.Configuration);
 
 var app = builder.Build();
 
@@ -29,6 +30,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=VendingMachine}/{action=Index}/{id?}");
 
 app.Run();
