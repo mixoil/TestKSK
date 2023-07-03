@@ -1,11 +1,11 @@
 ﻿@{
-    ViewData["Title"] = "Vending Machine";
+    ViewData["Title"] = "Admin Panel";
 }
 
-@model VendingMachineModel;
+@model AdminPanelModel;
 
 <div class="text-center">
-    <h1 class="display-4">Vending Machine</h1>
+    @*<h1 class="display-4">Vending Machine</h1>
     <div class="beverages">
         @foreach (var beverage in Model.Beverages)
         {
@@ -13,7 +13,6 @@
                 <button class="beverage-btn">
                     <h3>@beverage.Name</h3>
                     <h4>@beverage.Price</h4>
-                    <h6>@beverage.Count</h6>
                 </button>
             </div>
         }
@@ -30,8 +29,6 @@
     </div>
     <div id="balance-display-container">
         @Model.UserBalance
-    </div>
+    </div>*@
 </div>
-
-<script type="text/javascript" src="@Url.Content("/js/vending.js")"></script>
 
