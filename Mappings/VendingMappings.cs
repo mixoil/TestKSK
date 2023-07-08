@@ -8,6 +8,7 @@ namespace TestKSK.Mappings
     {
         public VendingMappings()
         {
+            CreateMap<VendingMachineModel, AdminPanelModel>();
             CreateMap<VendingMachine, VendingMachineModel>();
             CreateMap<MoneyUnit, MoneyUnitModel>();
             CreateMap<Beverage, BeverageModel>();

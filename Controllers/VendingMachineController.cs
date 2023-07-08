@@ -24,8 +24,10 @@ namespace TestKSK.Controllers
         [HttpPost("update-balance")]
         public async Task<ActionResult> UpdateBalance([FromBody] UpdateBalanceRequest request)
         {
-            await vendingMachineService.UpdateUserBalance(request);
-            return Ok();
+            var result = await vendingMachineService.UpdateUserBalance(request);
+            if (result.Succeeded)
+                return Ok();
+            return BadRequest(result.ErrorMsg);
         }
     }
 }

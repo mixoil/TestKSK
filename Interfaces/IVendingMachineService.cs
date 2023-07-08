@@ -6,6 +6,8 @@ namespace TestKSK.Interfaces
     public interface IVendingMachineService
     {
         Task<VendingMachineModel> GetVendingMachineModel();
-        Task UpdateUserBalance(UpdateBalanceRequest request);
+        Task<UserActionResult> UpdateUserBalance(UpdateBalanceRequest request); 
+        Task<AdminPanelModel> GetAdminModel();
+        Task<UserActionResult> UpdateState(AdminPanelModel adminModel);
     }
 }
