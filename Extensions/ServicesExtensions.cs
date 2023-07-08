@@ -11,6 +11,7 @@ namespace TestKSK.Extensions
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
             services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
+            services.AddSingleton<IJwtService, JwtService>();
             services.AddScoped<IVendingMachineService, VendingMachineService>();
             services.AddScoped<IDbContextInitializer, AppDbContextInitializer>(); 
             services.AddAutoMapper(typeof(VendingMappings));
