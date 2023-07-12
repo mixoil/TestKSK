@@ -5,31 +5,34 @@
 @model VendingMachineModel;
 
 <div class="text-center">
-    <h1 class="display-4">Vending Machine</h1>
-    <div class="beverages">
+    <h1 class="display-4">Торговый автомат</h1>
+    <div class="flex-container beverages">
         @foreach (var beverage in Model.Beverages)
         {
             <div>
                 <button class="beverage-btn">
                     <h3>@beverage.Name</h3>
-                    <h4>@beverage.Price</h4>
+                    <h4>@beverage.Price ₽</h4>
                     <h6>@beverage.Count</h6>
                 </button>
             </div>
         }
     </div>
-    <div class="money-unit-buttons">
+    <div class="flex-container money-unit-buttons">
         @foreach(var moneyUnit in Model.MoneyUnits)
         {
             <div>
-                <button class="money-unit-btn" onclick="onMoneyUnitClick(@moneyUnit.Denomination)">
-                    @moneyUnit.Denomination
+                <button 
+                disabled="@(!moneyUnit.IsAvailable)"
+                class="money-unit-btn" 
+                onclick="onMoneyUnitClick(@moneyUnit.Denomination)">
+                    @moneyUnit.Denomination ₽
                 </button>
             </div>
         }
     </div>
     <div id="balance-display-container">
-        @Model.UserBalance
+        Текущий баланс: @Model.UserBalance ₽
     </div>
 </div>
 

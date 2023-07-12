@@ -6,6 +6,7 @@ namespace TestKSK.Data
     {
         public string Name { get; set; }
         public uint Price { get; set; }
+        public uint Count { get; set; }
         public Guid VendingMachineId { get; set; }
         public VendingMachine VendingMachine { get; set; }
     }

@@ -10,13 +10,18 @@ namespace TestKSK.Services
     public class VendingMachineService : IVendingMachineService
     {
         private readonly IRepository<VendingMachine> vendingMachineRepository;
+        private readonly IRepository<Beverage> beverageRepository;
+        private readonly IRepository<MoneyUnit> moneyUnitRepository;
         private readonly IMapper mapper;
 
         public VendingMachineService(IRepository<VendingMachine> vendingMachineRepository,
-            IMapper mapper)
+            IRepository<Beverage> beverageRepository, IMapper mapper,
+            IRepository<MoneyUnit> moneyUnitRepository)
         {
             this.vendingMachineRepository = vendingMachineRepository;
+            this.beverageRepository = beverageRepository;
             this.mapper = mapper;
+            this.moneyUnitRepository = moneyUnitRepository;
         }
 
         public async Task<VendingMachineModel> GetVendingMachineModel()
@@ -46,10 +51,31 @@ namespace TestKSK.Services
             return result;
         }
 
+        public async Task<UserActionResult> SwitchMoneyUnitAvailability(
+            UpdateMoneyUnitAvailabilityRequest request)
+        {
+            var result = new UserActionResult();
+            if (request == null)
+            {
+                result.ErrorMsg = "Request missing!";
+                return result;
+            }
+            var moneyUnit = await GetMoneyUnit(request.Denomination);
+            if (moneyUnit == null)
+            {
+                result.ErrorMsg = "Money unit is missing!";
+                return result;
+            }
+            moneyUnit.IsAvailable = !moneyUnit.IsAvailable;
+            await moneyUnitRepository.SaveChangesAsync();
+            result.Succeeded = true;
+            return result;
+        }
+
         public async Task<VendingMachine> GetVendingMachine()
         {
             return await vendingMachineRepository.Query()
-                .Include(m => m.MoneyUnits)
+                .Include(m => m.MoneyUnits.OrderBy(u => u.Denomination))
                 .Include(m => m.Beverages)
                 .FirstOrDefaultAsync();
         }
@@ -69,9 +95,66 @@ namespace TestKSK.Services
             return result;
         }
 
-        private void UpdateVendingMachineDbModel(VendingMachine dbModel, AdminPanelModel adminModel)
+        #region Admin
+
+        public async Task<BeverageModel> GetBeverageModel(Guid id)
         {
-            
+            var beverage = await beverageRepository.Query().FirstOrDefaultAsync(b => b.Id == id);
+            if (beverage == null)
+                return null;
+            return mapper.Map<BeverageModel>(beverage);
         }
+
+        private async Task<Beverage> GetBeverage(Guid id)
+        {
+            return await beverageRepository.Query()
+                .FirstOrDefaultAsync(b => b.Id == id);
+        }
+
+        private async Task<MoneyUnit> GetMoneyUnit(uint denomination)
+        {
+            return await moneyUnitRepository.Query()
+                .FirstOrDefaultAsync(b => b.Denomination == denomination);
+        }
+
+        public async Task<UserActionResult> AddBeverage(BeverageModel beverageModel)
+        {
+            var result = new UserActionResult();
+            if (string.IsNullOrWhiteSpace(beverageModel.Name))
+            {
+                result.ErrorMsg = "Beverage name is invalid";
+                return result;
+            }
+            var dbVendingMachine = await GetVendingMachine();
+            var dbBeverage = mapper.Map<Beverage>(beverageModel);
+
+            dbVendingMachine.Beverages.Add(dbBeverage);
+            await vendingMachineRepository.SaveChangesAsync();
+
+            result.Succeeded = true;
+            return result;
+        }
+
+        public async Task<UserActionResult> EditBeverage(BeverageModel beverageModel)
+        {
+            var result = new UserActionResult();
+            if (string.IsNullOrWhiteSpace(beverageModel.Name))
+            {
+                result.ErrorMsg = "Beverage name is invalid";
+                return result;
+            }
+            var dbBeverage = await GetBeverage(beverageModel.Id);
+
+            dbBeverage.Name = beverageModel.Name;
+            dbBeverage.Price = beverageModel.Price;
+            dbBeverage.Count = beverageModel.Count;
+            
+            await beverageRepository.SaveChangesAsync();
+
+            result.Succeeded = true;
+            return result;
+        }
+
+        #endregion
     }
 }

@@ -2,6 +2,7 @@
 using System.Reflection;
 using TestKSK.Data.BaseEnities;
 using TestKSK.Data.Interfaces;
+using TestKSK.Models;
 
 namespace TestKSK
 {

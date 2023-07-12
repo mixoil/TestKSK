@@ -11,7 +11,7 @@ namespace TestKSK.Mappings
             CreateMap<VendingMachineModel, AdminPanelModel>();
             CreateMap<VendingMachine, VendingMachineModel>();
             CreateMap<MoneyUnit, MoneyUnitModel>();
-            CreateMap<Beverage, BeverageModel>();
+            CreateMap<Beverage, BeverageModel>().ReverseMap();
         }
     }
 }

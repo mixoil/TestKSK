@@ -21,8 +21,37 @@ body {
   margin-bottom: 60px;
 }
 
-.money-unit-buttons {
+.flex-container {
     display: flex;
     flex-direction: row;
+    justify-content: center;
     gap: 10px;
+}
+
+.money-unit-buttons {
+    margin-top: 15px;
+}
+
+.admin-money-unit-btn {
+    background-color: lightgray;
+}
+
+.admin-money-unit-btn.active {
+    background-color: darkgoldenrod;
+}
+
+.admin-beverage {
+    padding: 5px;
+    border: 1px solid black;
+}
+
+.beverages {
+}
+
+.beverage-adding-ref {
+    margin-top: 15px;
+}
+
+.custom-form .form-group {
+    margin-bottom: 10px;
 }
