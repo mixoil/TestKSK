@@ -51,7 +51,7 @@ namespace TestKSK.Controllers
         {
             var result = await vendingMachineService.EditBeverage(model);
             if (result.Succeeded)
-                return Ok();
+                return Redirect("/admin");
             return BadRequest(result.ErrorMsg);
         }
 
@@ -62,7 +62,7 @@ namespace TestKSK.Controllers
             var result = await vendingMachineService
                 .SwitchMoneyUnitAvailability(request);
             if (result.Succeeded)
-                return Ok();
+                return Redirect("/admin");
             return BadRequest(result.ErrorMsg);
         }
     }

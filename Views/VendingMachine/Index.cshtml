@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Vending Machine";
+    ViewData["Title"] = "Торговый автомат";
 }
 
 @model VendingMachineModel;
@@ -9,13 +9,16 @@
     <div class="flex-container beverages">
         @foreach (var beverage in Model.Beverages)
         {
-            <div>
-                <button class="beverage-btn">
-                    <h3>@beverage.Name</h3>
-                    <h4>@beverage.Price ₽</h4>
-                    <h6>@beverage.Count</h6>
-                </button>
-            </div>
+            <form asp-action="BuyBeverage" class="custom-form">
+                <input type="hidden" asp-for="Id" value="@beverage.Id"/>
+                <div>
+                    <button class="beverage-btn" type="submit">
+                        <h3>@beverage.Name</h3>
+                        <h4>@beverage.Price ₽</h4>
+                        <h6>@beverage.Count</h6>
+                    </button>
+                </div>
+            </form>
         }
     </div>
     <div class="flex-container money-unit-buttons">
@@ -31,8 +34,12 @@
             </div>
         }
     </div>
-    <div id="balance-display-container">
-        Текущий баланс: @Model.UserBalance ₽
+    <div>
+        Текущий баланс:
+        <div style="display: inline-block;" id="balance-display-container">
+            @Model.UserBalance
+        </div> 
+        ₽
     </div>
 </div>
 

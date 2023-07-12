@@ -29,5 +29,14 @@ namespace TestKSK.Controllers
                 return Ok();
             return BadRequest(result.ErrorMsg);
         }
+
+        [HttpPost("buy-beverage")]
+        public async Task<ActionResult> BuyBeverage(BeverageBuyRequest request)
+        {
+            var result = await vendingMachineService.BuyBeverage(request);
+            if (result.Succeeded)
+                return Ok($"Ваша сдача: {result.Change} ₽");
+            return BadRequest(result.ErrorMsg);
+        }
     }
 }

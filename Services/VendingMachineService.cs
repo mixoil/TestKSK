@@ -4,6 +4,7 @@ using TestKSK.Data;
 using TestKSK.Interfaces;
 using TestKSK.Models;
 using TestKSK.Models.Requests;
+using TestKSK.Models.Results;
 
 namespace TestKSK.Services
 {
@@ -28,6 +29,42 @@ namespace TestKSK.Services
         {
             var vendingMachine = await GetVendingMachine();
             return mapper.Map<VendingMachineModel>(vendingMachine);
+        }
+
+        public async Task<BeverageBuyResult> BuyBeverage(BeverageBuyRequest request)
+        {
+            var result = new BeverageBuyResult();
+            if (request == null)
+            {
+                result.ErrorMsg = "Request missing!";
+                return result;
+            }
+            var machine = await GetVendingMachine();
+            var dbBeverage = machine.Beverages.FirstOrDefault(b => b.Id == request.Id);
+            if (dbBeverage == null)
+            {
+                result.ErrorMsg = "Beverage not found!";
+                return result;
+            }
+            if (dbBeverage.Count < 1)
+            {
+                result.ErrorMsg = "Beverage solded out!";
+                return result;
+            }
+            if (dbBeverage.Price > machine.UserBalance)
+            {
+                result.ErrorMsg = "User balance too low!";
+                return result;
+            }
+
+            result.Change = machine.UserBalance - dbBeverage.Price;
+            dbBeverage.Count--;
+            machine.UserBalance = 0;
+
+            await vendingMachineRepository.SaveChangesAsync();
+
+            result.Succeeded = true;
+            return result;
         }
 
         public async Task<UserActionResult> UpdateUserBalance(UpdateBalanceRequest request)
